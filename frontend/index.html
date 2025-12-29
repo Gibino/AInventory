@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AInventory - Smart home inventory management tool">
+    <title>AInventário</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav>
+        <div class="container nav-content">
+            <h1 data-i18n="nav_title">🏠 AInventário</h1>
+            <div class="nav-actions">
+                <button id="settings-btn" class="btn-icon" title="Configurações">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+                <button id="add-item-btn" class="btn-primary" data-i18n="nav_add_item">+ Novo Item</button>
+                <button id="toggle-list-btn" class="btn-secondary" data-i18n="nav_list">🛒 Lista</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Dashboard Stats -->
+        <section class="dashboard-stats">
+            <div class="stat-card" id="stat-ok">
+                <span class="stat-value">0</span>
+                <span class="stat-label" data-i18n="section_stock">Em estoque</span>
+            </div>
+            <div class="stat-card attention" id="stat-attention">
+                <span class="stat-value">0</span>
+                <span class="stat-label" data-i18n="section_attention">Atenção</span>
+            </div>
+            <div class="stat-card critical" id="stat-critical">
+                <span class="stat-value">0</span>
+                <span class="stat-label" data-i18n="section_critical">Acabando</span>
+            </div>
+        </section>
+
+        <!-- Categories Filter -->
+        <section class="categories-filter" id="categories-list">
+            <!-- Categories will be loaded here -->
+        </section>
+        <div style="padding: 0 4px 20px 4px;">
+            <button id="add-category-btn" class="btn-secondary w-100">
+                <span>+</span> <span data-i18n="btn_add_category">Nova Categoria</span>
+            </button>
+        </div>
+
+        <!-- Items Grid -->
+        <section class="items-grid" id="items-grid">
+            <!-- Items will be loaded here -->
+        </section>
+    </main>
+
+    <!-- Settings Side Panel -->
+    <div id="settings-panel" class="side-panel">
+        <div class="side-panel-overlay"></div>
+        <div class="side-panel-content">
+            <div class="side-panel-header">
+                <h2 data-i18n="settings_title">⚙️ Configurações</h2>
+                <button class="close-btn" id="close-settings">&times;</button>
+            </div>
+            <div class="side-panel-body">
+                <!-- Theme Setting -->
+                <div class="settings-group-title" data-i18n="settings_appearance">Aparência</div>
+                <div class="settings-group">
+                    <div class="setting-item no-border">
+                        <div class="theme-segmented-control">
+                            <button id="theme-auto" class="segment-btn active" data-theme="auto">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                                <span data-i18n="settings_theme_system">Sistema</span>
+                            </button>
+                            <button id="theme-light" class="segment-btn" data-theme="light">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                                <span data-i18n="settings_theme_light">Claro</span>
+                            </button>
+                            <button id="theme-dark" class="segment-btn" data-theme="dark">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                </svg>
+                                <span data-i18n="settings_theme_dark">Escuro</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Settings -->
+                <div class="settings-group-title" data-i18n="settings_language">Idioma</div>
+                <div class="settings-group">
+                    <div class="setting-item no-border">
+                        <div class="theme-segmented-control">
+                            <button id="lang-pt" class="segment-btn active" data-lang="pt-BR">
+                                <span>🇧🇷 Português</span>
+                            </button>
+                            <button id="lang-en" class="segment-btn" data-lang="en-US">
+                                <span>🇺🇸 English</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="settings-group-title" data-i18n="settings_notifications">Notificações</div>
+                <div class="settings-group">
+                    <div class="setting-item">
+                        <label class="toggle-setting">
+                            <div class="label-with-icon">
+                                <div class="icon-box warning">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                                        </path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                </div>
+                                <span class="toggle-label" data-i18n="settings_low_stock">Estoque Baixo</span>
+                            </div>
+                            <input type="checkbox" id="notify-low-stock" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item no-border">
+                        <label class="toggle-setting">
+                            <div class="label-with-icon">
+                                <div class="icon-box info">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                </div>
+                                <span class="toggle-label" data-i18n="settings_reminders">Lembretes de
+                                    Verificação</span>
+                            </div>
+                            <input type="checkbox" id="notify-reminders" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- User Profile & Actions -->
+                <div class="settings-group-title" data-i18n="settings_profile">Perfil</div>
+                <div class="settings-group">
+                    <div class="setting-item clickable" id="edit-profile-btn">
+                        <div class="label-with-icon">
+                            <div class="icon-box info">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <span class="toggle-label" data-i18n="btn_edit_profile">Editar Perfil</span>
+                        </div>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" style="opacity: 0.5;">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </div>
+                </div>
+
+                <button id="logout-btn" class="btn-secondary w-100"
+                    style="margin-top: 20px; color: var(--accent-red); border-color: var(--border-light);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="margin-right: 8px;">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span data-i18n="btn_logout">Sair</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping List Modal -->
+    <div id="shopping-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="modal_shopping_list">🛒 Lista de Compras</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div id="shopping-list-content">
+                <!-- Shopping items will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button id="copy-list-btn" class="btn-secondary" data-i18n="btn_copy_list">📋 Copiar Lista</button>
+                <button id="share-list-btn" class="btn-primary" data-i18n="btn_share_list">📤 Compartilhar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Item Modal -->
+    <div id="item-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modal-title" data-i18n="modal_new_item">Novo Item</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="item-form">
+                <input type="hidden" id="item-id">
+
+                <!-- Product Scanner Button -->
+                <div class="barcode-section">
+                    <button type="button" id="scan-barcode-btn" class="btn-scan">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                            </path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        <span data-i18n="btn_scan_product">📷 Escanear Produto com IA</span>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="name" data-i18n="label_name">Nome do Item</label>
+                    <input type="text" id="name" required data-i18n-placeholder="placeholder_item_name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category" data-i18n="label_category">Categoria</label>
+                        <select id="category" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="unit" data-i18n="label_unit">Unidade</label>
+                        <select id="unit" required>
+                            <option value="un" data-i18n="unit_un">un</option>
+                            <option value="kg" data-i18n="unit_kg">kg</option>
+                            <option value="g" data-i18n="unit_g">g</option>
+                            <option value="L" data-i18n="unit_L">L</option>
+                            <option value="ml" data-i18n="unit_ml">ml</option>
+                            <option value="pacotes" data-i18n="unit_packets">pacotes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="current_quantity" data-i18n="label_current_qty">Qtd Atual</label>
+                        <input type="number" id="current_quantity" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="minimum_quantity" data-i18n="label_min_qty">Qtd Mínima</label>
+                        <input type="number" id="minimum_quantity" step="0.1" required>
+                    </div>
+                </div>
+
+                <!-- Acquisition Difficulty -->
+                <div class="form-group">
+                    <label data-i18n="label_difficulty">Dificuldade de Aquisição</label>
+                    <div class="difficulty-selector">
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="0" checked>
+                            <span class="difficulty-badge easy" data-i18n="difficulty_easy">🟢 Fácil</span>
+                        </label>
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="5">
+                            <span class="difficulty-badge medium" data-i18n="difficulty_medium">🟡 Médio</span>
+                        </label>
+                        <label class="difficulty-option">
+                            <input type="radio" name="difficulty" value="10">
+                            <span class="difficulty-badge hard" data-i18n="difficulty_hard">🔴 Difícil</span>
+                        </label>
+                    </div>
+                    <small class="help-text" data-i18n="help_difficulty">Itens difíceis terão mais dias de antecedência
+                        no alerta</small>
+                </div>
+
+                <!-- Usage Rate -->
+                <div class="form-group">
+                    <label><span data-i18n="label_usage_rate">Consumo Estimado</span> <span class="optional-label"
+                            data-i18n="label_optional">(opcional)</span></label>
+                    <div class="form-row">
+                        <input type="number" id="usage_rate" placeholder="Ex: 0.5" step="0.1" min="0">
+                        <select id="usage_period">
+                            <option value="daily" data-i18n="period_daily">por dia</option>
+                            <option value="weekly" data-i18n="period_weekly">por semana</option>
+                            <option value="monthly" data-i18n="period_monthly">por mês</option>
+                        </select>
+                    </div>
+                    <small class="help-text" data-i18n="help_usage">Se não informado, o sistema aprenderá com seu
+                        uso</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes" data-i18n="label_notes">Notas <span class="optional-label"
+                            data-i18n="label_optional">(opcional)</span></label>
+                    <textarea id="notes" rows="2" data-i18n-placeholder="placeholder_notes"></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-100" data-i18n="btn_save">Salvar Item</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 data-i18n="modal_delete_title">🗑️ Confirmar Exclusão</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="delete-confirm-content">
+                <div class="delete-icon-wrapper">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                </div>
+                <p>Tem certeza que deseja remover <strong id="delete-item-name"></strong> do inventário?</p>
+                <p class="warning-text" data-i18n="modal_delete_warning">⚠️ Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer delete-actions">
+                <button id="cancel-delete-btn" class="btn-secondary" data-i18n="btn_cancel">Cancelar</button>
+                <button id="confirm-delete-btn" class="btn-danger" data-i18n="btn_delete">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Scanner Modal -->
+    <div id="scanner-modal" class="modal">
+        <div class="modal-content modal-scanner">
+            <div class="modal-header">
+                <h2 data-i18n="modal_scan_title">📷 Escanear Produto</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <p class="scanner-hint" data-i18n="text_scan_hint">Aponte a câmera para o produto. A IA identificará
+                automaticamente.</p>
+            <div class="scanner-container">
+                <video id="scanner-video" autoplay playsinline></video>
+                <canvas id="scanner-canvas" style="display: none;"></canvas>
+            </div>
+            <div class="scanner-controls">
+                <button id="capture-btn" class="btn-primary" data-i18n="btn_capture">📸 Capturar</button>
+                <button id="cancel-scan-btn" class="btn-secondary" data-i18n="btn_cancel">Cancelar</button>
+            </div>
+            <div id="scanner-status" class="scanner-status"></div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 data-i18n="modal_profile_title">Editar Perfil</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="profile-name" data-i18n="label_name">Nome</label>
+                    <input type="text" id="profile-name" placeholder="Seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="profile-phone" data-i18n="label_phone">Celular</label>
+                    <input type="tel" id="profile-phone" placeholder="+55 11 99999-9999">
+                    <small class="help-text" data-i18n="help_notifications">Para notificações via Shortcuts</small>
+                </div>
+
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-light);">
+
+                <div class="form-group">
+                    <label data-i18n="label_new_password">Nova Senha (opcional)</label>
+                    <input type="password" id="profile-password" placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn-primary w-100" data-i18n="btn_save_changes">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Category Modal -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2 data-i18n="modal_new_category">Nova Categoria</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="category-form">
+                <div class="form-group">
+                    <label data-i18n="label_category_name">Nome da Categoria</label>
+                    <input type="text" id="cat-name" required placeholder="Ex: Bebidas">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="label_icon">Ícone (Emoji)</label>
+                        <button type="button" id="emoji-picker-trigger" class="emoji-picker-trigger">
+                            <span id="cat-icon-preview">📦</span>
+                        </button>
+                        <input type="hidden" id="cat-icon" value="📦">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="label_color">Cor</label>
+                        <input type="color" id="cat-color" value="#3399FF"
+                            style="height: 48px; width: 100%; padding: 0;">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary w-100" data-i18n="btn_create">Criar Categoria</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Emoji Picker Modal -->
+    <div id="emoji-picker-modal" class="modal emoji-picker-modal">
+        <div class="modal-content emoji-picker-content">
+            <div class="emoji-picker-header">
+                <input type="text" id="emoji-search" class="emoji-search" placeholder="Search emoji..."
+                    data-i18n-placeholder="placeholder_search_emoji">
+                <button class="close-btn" id="close-emoji-picker">&times;</button>
+            </div>
+            <div class="emoji-categories" id="emoji-categories">
+                <!-- Category tabs will be generated by JS -->
+            </div>
+            <div class="emoji-grid-container" id="emoji-grid-container">
+                <!-- Emojis will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="emoji_data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
